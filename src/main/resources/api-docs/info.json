@@ -1,0 +1,15 @@
+{
+  "info": {
+    "description": "geladinha API",
+    "version": "1.0.0",
+    "title": "geladinha API",
+    "termsOfService": "https://github.com/zxventures/geladinha",
+    "license": {
+      "name": "Copyright",
+      "url": "https://github.com/zxventures/geladinha"
+    },
+    "contact": {
+      "email": "nykolas.lima@gmail.com"
+    }
+  }
+}
