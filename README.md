@@ -1,5 +1,7 @@
 # Geladinha
 
+![Build Status](https://circleci.com/gh/nykolaslima/geladinha.svg?&style=shield)
+
 This application aim to provide a sample application implementing a REST API with Akka technology.  
 The endpoints support JSON and binary Protobuf protocols with Swagger as documentation tool.  
 
