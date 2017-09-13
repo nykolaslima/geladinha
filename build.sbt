@@ -41,10 +41,11 @@ lazy val akkaComplementsDependencies = Seq(
 )
 
 lazy val databaseDependencies = Seq(
-  "com.github.tminglei" %% "slick-pg" % "0.14.3",
+  "org.postgresql" % "postgresql" % "9.4.1212.jre7",
   "com.typesafe.slick" %% "slick" % slickV,
   "com.typesafe.slick" %% "slick-hikaricp" % slickV,
-  "org.postgresql" % "postgresql" % "9.4.1212.jre7"
+  "com.github.tminglei" %% "slick-pg" % "0.14.3",
+  "com.github.tminglei" %% "slick-pg_jts" % "0.14.3"
 )
 
 lazy val googleDependencies = Seq(

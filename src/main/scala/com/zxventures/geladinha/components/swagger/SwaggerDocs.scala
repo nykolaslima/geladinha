@@ -113,13 +113,69 @@ object SwaggerDocs {
         .foldLeft(Map[String, Any]()) { (a, b) => Map(b.getName -> fieldDetails(b)) ++ a }
     }
 
+    val resourcesToGenerate = _resources.filter { resource =>
+      !resource.getFullName.startsWith("com.zxventures.geladinha.resources.geometry")
+    }
+
     Map(
-      "definitions" -> _resources.flatMap { resource =>
+      "definitions" -> resourcesToGenerate.flatMap { resource =>
         Map(resource.getName -> Map(
           "type" -> "object",
           "properties" -> fields(resource)
-        ))
+        )) ++ geoJsonJsonSchema()
       }.toMap
+    )
+  }
+
+  private def geoJsonJsonSchema(): Map[String, Map[String, Any]] = {
+    Map(
+      "Position" -> Map(
+        "type" -> "array",
+        "items" -> List(
+          "type" -> "number",
+          "type" -> "number"
+        )
+      ),
+      "PositionArray" -> Map(
+        "type" -> "array",
+        "items" -> Map(
+          "$ref" -> "#/definitions/Position"
+        )
+      ),
+      "LinearString" -> Map(
+        "type" -> "array",
+        "items" -> Map(
+          "$ref" -> "#/definitions/PositionArray"
+        )
+      ),
+      "Polygon" -> Map(
+        "type" -> "array",
+        "items" -> Map(
+          "$ref" -> "#/definitions/LinearString"
+        )
+      ),
+      "Point" -> Map(
+        "type" -> "object",
+        "properties" -> Map(
+          "type" -> Map(
+            "enum" -> List("Point")
+          ),
+          "coordinates" -> Map(
+            "$ref" -> "#/definitions/Position"
+          )
+        )
+      ),
+      "MultiPolygon" -> Map(
+        "type" -> "object",
+        "properties" -> Map(
+          "type" -> Map(
+            "enum" -> List("MultiPolygon")
+          ),
+          "coordinates" -> Map(
+            "$ref" -> "#/definitions/Polygon"
+          )
+        )
+      )
     )
   }
 

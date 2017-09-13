@@ -1,10 +1,10 @@
 package com.zxventures.geladinha.infrastructure.persistence.postgres
 
-import com.github.tminglei.slickpg.{ExPostgresDriver, PgArraySupport, PgEnumSupport, PgJsonSupport}
+import com.github.tminglei.slickpg._
 
-trait PostgresDriver extends ExPostgresDriver with PgArraySupport with PgJsonSupport with PgEnumSupport {
+trait PostgresDriver extends ExPostgresDriver with PgArraySupport with PgJsonSupport with PgEnumSupport with PgPostGISSupport {
   override def pgjson: String = "jsonb"
-  override val api = new API with ArrayImplicits with JsonImplicits {}
+  override val api = new API with ArrayImplicits with JsonImplicits with PostGISImplicits {}
 }
 
 object PostgresDriver extends PostgresDriver

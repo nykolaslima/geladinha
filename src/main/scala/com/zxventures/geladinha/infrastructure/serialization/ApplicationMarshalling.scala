@@ -1,7 +1,5 @@
 package com.zxventures.geladinha.infrastructure.serialization
 
-import scala.concurrent.Future
-
 import akka.http.scaladsl.marshalling.{Marshaller, _}
 import akka.http.scaladsl.model.MediaType.Compressible
 import akka.http.scaladsl.model.{ContentType, ContentTypes, HttpEntity, MediaType}
@@ -11,6 +9,8 @@ import akka.http.scaladsl.util.FastFuture
 import com.google.protobuf.CodedInputStream
 import com.trueaccord.scalapb.json.JsonFormat
 import com.trueaccord.scalapb.{GeneratedMessage, GeneratedMessageCompanion, Message}
+
+import scala.concurrent.Future
 
 trait ApplicationMarshalling {
   private val protobufContentType = ContentType(MediaType.applicationBinary("x-protobuf", Compressible, "proto"))

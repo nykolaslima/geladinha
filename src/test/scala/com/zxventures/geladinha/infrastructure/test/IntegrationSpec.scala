@@ -18,6 +18,6 @@ trait IntegrationSpec extends UnitSpec with ScalaFutures {
   val db = Database.forConfig("database.postgres", config)
 
   before {
-    Await.result(db.run(sqlu"delete from users;"), 5.seconds)
+    Await.result(db.run(sqlu"delete from points_of_sale;"), 5.seconds)
   }
 }

@@ -5,6 +5,9 @@ import akka.http.scaladsl.marshalling.Marshaller._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
 import com.google.protobuf.Descriptors.Descriptor
+import com.zxventures.geladinha.resources.common.{Error, Message, Messages}
+import com.zxventures.geladinha.resources.geometry.{LinearString, MultiPolygon, Point, Polygon}
+import com.zxventures.geladinha.resources.pointOfSale.PointOfSale
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport
 import org.json4s.{DefaultFormats, jackson}
 import spray.json.DefaultJsonProtocol
@@ -16,7 +19,16 @@ class SwaggerRoute extends Json4sSupport with DefaultJsonProtocol with SprayJson
   implicit val formats = DefaultFormats
   implicit val serialization = jackson.Serialization
 
-  val descriptors: List[Descriptor] = List()
+  val descriptors: List[Descriptor] = List(
+      PointOfSale.javaDescriptor,
+      MultiPolygon.javaDescriptor,
+      Polygon.javaDescriptor,
+      LinearString.javaDescriptor,
+      Point.javaDescriptor,
+      Message.javaDescriptor,
+      Messages.javaDescriptor,
+      Error.javaDescriptor
+  )
 
   def routes = get {
     pathPrefix("api-docs") {

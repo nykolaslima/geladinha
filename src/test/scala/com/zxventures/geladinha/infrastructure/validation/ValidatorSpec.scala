@@ -1,7 +1,8 @@
 package com.zxventures.geladinha.infrastructure.validation
 
+import com.zxventures.geladinha.components.common.Message
+import com.zxventures.geladinha.components.common.MessageCategory._
 import com.zxventures.geladinha.infrastructure.test.UnitSpec
-import com.zxventures.geladinha.infrastructure.validation.RejectionCategory._
 
 class ValidatorSpec extends UnitSpec {
 
@@ -9,7 +10,7 @@ class ValidatorSpec extends UnitSpec {
     "validate rule" in {
       val emptyStringToBeValidated = ""
       val rules: List[Rule[String]] = List(
-        Rule(value => (!value.isEmpty, Rejection(VALIDATION, "name", "name can't be empty", "name")))
+        Rule(value => (!value.isEmpty, Message(VALIDATION, "name", "name can't be empty", "name")))
       )
 
       val rejections = Validator.validate(emptyStringToBeValidated, rules)
@@ -23,8 +24,8 @@ class ValidatorSpec extends UnitSpec {
     "validate multiple rules" in {
       val passwordToBeValidated = "12345"
       val rules: List[Rule[String]] = List(
-        Rule(value => (value.size >= 6, Rejection(VALIDATION, "password", "password should have at least 6 characters", "password"))),
-        Rule(value => (value.matches("[a-zA-Z]") && value.matches("[0-9]"), Rejection(VALIDATION, "password", "password should have numbers and letters", "password")))
+        Rule(value => (value.size >= 6, Message(VALIDATION, "password", "password should have at least 6 characters", "password"))),
+        Rule(value => (value.matches("[a-zA-Z]") && value.matches("[0-9]"), Message(VALIDATION, "password", "password should have numbers and letters", "password")))
       )
 
       val rejections = Validator.validate(passwordToBeValidated, rules)
@@ -50,7 +51,7 @@ class ValidatorSpec extends UnitSpec {
     "return empty list for valid value" in {
       val passwordToBeValidated = "123456"
       val rules: List[Rule[String]] = List(
-        Rule(value => (value.size >= 6, Rejection(VALIDATION, "password", "password should have at least 6 characters", "password")))
+        Rule(value => (value.size >= 6, Message(VALIDATION, "password", "password should have at least 6 characters", "password")))
       )
 
       val rejections = Validator.validate(passwordToBeValidated, rules)

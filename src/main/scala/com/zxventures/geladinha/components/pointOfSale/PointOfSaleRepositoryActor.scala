@@ -1,0 +1,39 @@
+package com.zxventures.geladinha.components.pointOfSale
+
+import akka.actor.{Actor, ActorLogging, Props}
+import akka.event.LoggingReceive
+import com.zxventures.geladinha.components.pointOfSale.ActorMessages.{PointOfSaleCreateRequest, PointOfSaleCreateResponse}
+import com.zxventures.geladinha.infrastructure.logs.ApplicationError._
+import com.zxventures.geladinha.infrastructure.logs.GelfLogger
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.util.{Failure, Success}
+
+class PointOfSaleRepositoryActor(repository: PointOfSaleRepository) extends Actor with ActorLogging {
+  override def preRestart(reason: Throwable, message: Option[Any]): Unit = {
+    log.warning(GelfLogger.warn(s"Restarting Actor due: ${reason.getMessage}",
+      Map("internal_operation" -> ACTOR_RESTARTING), fullMessage = Some(reason.toString)))
+  }
+
+  def receive = LoggingReceive {
+    case PointOfSaleCreateRequest(requestId, _, Some(pointOfSale)) =>
+      val replyTo = sender()
+
+      repository.add(pointOfSale).onComplete {
+        case Success(addedPointOfSale) =>
+          replyTo ! PointOfSaleCreateResponse(requestId, Some(addedPointOfSale))
+
+        case Failure(e) =>
+          log.error(e, GelfLogger.buildWithRequestId(requestId).error(s"point of sale create failed", Map("action" -> "point-of-sale-create", "result" -> "failed")))
+          replyTo ! PointOfSaleCreateResponse(requestId, failure = Some(e))
+      }
+
+    case x: Any => log.warning(GelfLogger.warn(s"Unknown message: $x", Map("internal_operation" -> UNKNOWN_MESSAGE)))
+  }
+}
+
+object PointOfSaleRepositoryActor {
+  def props(pointOfSaleRepository: PointOfSaleRepository = PointOfSaleRepository) = Props(new PointOfSaleRepositoryActor(pointOfSaleRepository))
+  val name = "point-of-sale-repository-actor"
+
+}
