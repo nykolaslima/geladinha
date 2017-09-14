@@ -46,6 +46,52 @@
           }
         }
       }
+    },
+    "/points-of-sale/{id}": {
+      "get": {
+        "tags": [
+          "Public"
+        ],
+        "summary": "Load a point of sale by its id",
+        "description": "Given an id, load a point of sale into ZXVentures platform",
+        "operationId": "LoadPointOfSale",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of point of sale to be loaded",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Loaded point of sale",
+            "schema": {
+              "$ref": "#/definitions/PointOfSale"
+            }
+          },
+          "404": {
+            "description": "No point of sale found",
+            "schema": {
+              "$ref": "#/definitions/Messages"
+            }
+          },
+          "500": {
+            "description": "Unexpected error happened",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
     }
   }
 }

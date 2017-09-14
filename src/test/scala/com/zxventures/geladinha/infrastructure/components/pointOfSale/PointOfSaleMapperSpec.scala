@@ -14,7 +14,7 @@ class PointOfSaleMapperSpec extends UnitSpec with PointOfSaleGenerator {
         val pointOfSaleCreate = pointOfSaleCreateGen.sample.get
         val pointOfSale = PointOfSaleMapper.toPointOfSale(pointOfSaleCreate)
 
-        pointOfSale.id.isEmpty shouldEqual(true)
+        pointOfSale.id shouldEqual 0
         pointOfSale.tradingName shouldEqual pointOfSaleCreate.tradingName.get
         pointOfSale.ownerName shouldEqual pointOfSaleCreate.ownerName.get
         pointOfSale.document shouldEqual pointOfSaleCreate.document.get
@@ -46,7 +46,7 @@ class PointOfSaleMapperSpec extends UnitSpec with PointOfSaleGenerator {
         val pointOfSale = pointOfSaleGen.sample.get
         val resource = PointOfSaleMapper.toResource(pointOfSale)
 
-        resource.id shouldEqual pointOfSale.id.get
+        resource.id shouldEqual pointOfSale.id
         resource.tradingName shouldEqual pointOfSale.tradingName
         resource.ownerName shouldEqual pointOfSale.ownerName
         resource.document shouldEqual pointOfSale.document

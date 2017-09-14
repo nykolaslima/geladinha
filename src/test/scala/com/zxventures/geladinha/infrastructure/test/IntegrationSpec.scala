@@ -12,7 +12,7 @@ import org.scalatest.time.{Millis, Seconds, Span}
 
 trait IntegrationSpec extends UnitSpec with ScalaFutures {
   implicit def default(implicit system: ActorSystem) = RouteTestTimeout(5.seconds)
-  implicit val defaultPatience = PatienceConfig(timeout = Span(5, Seconds), interval = Span(10000, Millis))
+  implicit val defaultPatience = PatienceConfig(timeout = Span(5, Seconds), interval = Span(100, Millis))
 
   val config = ConfigFactory.load("test")
   val db = Database.forConfig("database.postgres", config)

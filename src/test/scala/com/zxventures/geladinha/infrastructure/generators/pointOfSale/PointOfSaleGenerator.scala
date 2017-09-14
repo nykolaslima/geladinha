@@ -43,7 +43,7 @@ trait PointOfSaleGenerator extends GeneratorUtil {
   point.setSRID(4326)
 
   val pointOfSaleGen = for {
-    id <- some(posNum[Long])
+    id <- posNum[Long]
     tradingName <- alphaStr(100)
     ownerName <- alphaStr(100)
     document <- alphaStr(17)
