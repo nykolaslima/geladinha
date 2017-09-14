@@ -1,6 +1,6 @@
 postgres:
   container_name: postgres
-  image: postgres
+  image: mdillon/postgis
   environment:
     - PGPASSWORD=postgres
   ports:

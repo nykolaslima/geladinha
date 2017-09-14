@@ -128,7 +128,7 @@ MIGRATE_DB_PASSWORD := postgres
 MIGRATE_DB_URL := jdbc:postgresql://postgres/geladinha
 
 PROTO_REPOSITORY = nykolaslima/geladinha-resources
-PROTO_VERSION = v2.0.0
+PROTO_VERSION = v0.0.3
 PROTOS_PATH = tmp/resources
 RESOURCES_PATH = src/main/generated-proto
 

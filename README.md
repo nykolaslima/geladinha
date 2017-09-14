@@ -60,8 +60,8 @@ The docker image defines an entrypoint ready to run and optionally pass custom a
 
 ```sh
 docker run \
-  -p 8080:8080 \
-  -e environment=qa \
+  -p 9090:9090 \
+  -e environment=test \
   zxventures/geladinha:latest \
   -Dakka.loglevel=WARN
 ```

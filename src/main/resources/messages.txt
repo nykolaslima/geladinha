@@ -1,3 +1,7 @@
 validation.required {0} is required
 
-user.name Name
+pointOfSale.tradingName Trading name
+pointOfSale.ownerName Owner name
+pointOfSale.document Document
+pointOfSale.coverageArea Coverage area
+pointOfSale.address Address
