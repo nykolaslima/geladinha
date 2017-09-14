@@ -1,8 +1,8 @@
 package com.zxventures.geladinha.components.pointOfSale
 
+import com.vividsolutions.jts.geom.{MultiPolygon, Point}
 import com.zxventures.geladinha.infrastructure.persistence.postgres.DBConnection
 import com.zxventures.geladinha.infrastructure.persistence.postgres.PostgresDriver.api._
-import com.vividsolutions.jts.geom.{MultiPolygon, Point}
 
 import scala.concurrent.Future
 
@@ -15,8 +15,13 @@ trait PointOfSaleRepository extends DBConnection {
     run(query += pointOfSale)
   }
 
+  def load(id: Long): Future[Option[PointOfSale]] = {
+    val query = pointsOfSale.filter(_.id === id).result.headOption
+    run(query)
+  }
+
   private[pointOfSale] class PointOfSaleModel(tag: Tag) extends Table[PointOfSale](tag, "points_of_sale") {
-    def id = column[Option[Long]]("id", O.PrimaryKey, O.AutoInc)
+    def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def tradingName = column[String]("trading_name")
     def ownerName = column[String]("owner_name")
     def document = column[String]("document")

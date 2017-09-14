@@ -6,7 +6,7 @@ import com.zxventures.geladinha.resources.pointOfSale.{PointOfSale => PointOfSal
 
 trait PointOfSaleMapper {
   def toPointOfSale(pointOfSaleCreate: PointOfSaleCreate) = PointOfSale(
-    id = None,
+    id = 0,
     tradingName = pointOfSaleCreate.tradingName.get,
     ownerName = pointOfSaleCreate.ownerName.get,
     document = pointOfSaleCreate.document.get,
@@ -23,7 +23,7 @@ trait PointOfSaleMapper {
   )
 
   def toResource(pointOfSale: PointOfSale) = PointOfSaleResource(
-    id = pointOfSale.id.get,
+    id = pointOfSale.id,
     tradingName = pointOfSale.tradingName,
     ownerName = pointOfSale.ownerName,
     document = pointOfSale.document,

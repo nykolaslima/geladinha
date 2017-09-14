@@ -2,7 +2,7 @@ package com.zxventures.geladinha.components.pointOfSale
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
-import com.zxventures.geladinha.components.pointOfSale.ActorMessages.{PointOfSaleCreateRequest, PointOfSaleCreateResponse}
+import com.zxventures.geladinha.components.pointOfSale.ActorMessages.{PointOfSaleCreateRequest, PointOfSaleCreateResponse, PointOfSaleLoadRequest}
 import com.zxventures.geladinha.infrastructure.logs.ApplicationError._
 import com.zxventures.geladinha.infrastructure.logs.GelfLogger
 
@@ -27,7 +27,11 @@ class PointOfSaleServiceActor(repositoryActorRef: Option[ActorRef], validator: P
           replyTo ! PointOfSaleCreateResponse(requestId, messages = messages)
       }
 
-    case x: Any => log.warning(GelfLogger.warn(s"Unknown message: $x", Map("internal_operation" -> UNKNOWN_MESSAGE)))
+    case request: PointOfSaleLoadRequest =>
+      repositoryActor forward request
+
+    case x: Any =>
+      log.warning(GelfLogger.warn(s"Unknown message: $x", Map("internal_operation" -> UNKNOWN_MESSAGE)))
   }
 
   private def createRepository() = {
