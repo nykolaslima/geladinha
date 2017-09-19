@@ -24,3 +24,4 @@ test:
   override:
     - sudo service postgresql stop
     - make test
+    - make test/coveralls
