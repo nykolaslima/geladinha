@@ -73,7 +73,7 @@ fetch/resources:
 #
 #   make test
 #
-test: dependencies/resources dependencies/services test/run dependencies/clean/services
+test: dependencies/resources dependencies/services test/run test/coverage dependencies/clean/services
 
 # Compile project with test folder included
 #
@@ -88,6 +88,20 @@ test/compile: dependencies/resources
 #
 test/run:
 	$(_sbt-cmd-with-dependencies) test
+
+# Run coverage analysis and reports
+#
+#   make test/coverage
+#
+test/coverage:
+	$(_sbt-cmd) coverage coverageReport
+
+# Send coverate reports to Coveralls
+#
+#   make test/coveralls
+#
+test/coveralls:
+	$(_sbt-cmd) coverageAggregate coveralls
 
 # Configure gcloud tool to be used by circleci
 #   make circleci/gcloud/setup
