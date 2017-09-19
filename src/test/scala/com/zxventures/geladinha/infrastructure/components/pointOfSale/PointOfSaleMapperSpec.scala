@@ -40,11 +40,11 @@ class PointOfSaleMapperSpec extends UnitSpec with PointOfSaleGenerator {
     }
   }
 
-  "toResource" when {
+  "toPointOfSaleResource" when {
     "receives a valid point of sale" must {
       "transform into point of sale resource" in {
         val pointOfSale = pointOfSaleGen.sample.get
-        val resource = PointOfSaleMapper.toResource(pointOfSale)
+        val resource = PointOfSaleMapper.toPointOfSaleResource(pointOfSale)
 
         resource.id shouldEqual pointOfSale.id
         resource.tradingName shouldEqual pointOfSale.tradingName
@@ -53,6 +53,24 @@ class PointOfSaleMapperSpec extends UnitSpec with PointOfSaleGenerator {
         multiPolygonShouldEqual(pointOfSale.coverageArea, resource.coverageArea.get)
         resource.address.get.latitude shouldEqual pointOfSale.address.getY
         resource.address.get.longitude shouldEqual pointOfSale.address.getX
+      }
+    }
+  }
+
+  "toPointsOfSaleResource" when {
+    "receives a list of valid point of sale" must {
+      "transform into points of sale resource" in {
+        val pointOfSale = pointOfSaleGen.sample.get
+        val resource = PointOfSaleMapper.toPointsOfSaleResource(List(pointOfSale))
+
+        resource.pointsOfSale.size shouldEqual 1
+        resource.pointsOfSale(0).id shouldEqual pointOfSale.id
+        resource.pointsOfSale(0).tradingName shouldEqual pointOfSale.tradingName
+        resource.pointsOfSale(0).ownerName shouldEqual pointOfSale.ownerName
+        resource.pointsOfSale(0).document shouldEqual pointOfSale.document
+        multiPolygonShouldEqual(pointOfSale.coverageArea, resource.pointsOfSale(0).coverageArea.get)
+        resource.pointsOfSale(0).address.get.latitude shouldEqual pointOfSale.address.getY
+        resource.pointsOfSale(0).address.get.longitude shouldEqual pointOfSale.address.getX
       }
     }
   }

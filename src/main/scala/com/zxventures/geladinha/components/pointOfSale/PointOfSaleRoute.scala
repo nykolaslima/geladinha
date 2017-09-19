@@ -5,8 +5,9 @@ import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.server.Directives._
 import akka.pattern.ask
 import akka.util.Timeout
+import com.vividsolutions.jts.geom.{Coordinate, GeometryFactory}
 import com.zxventures.geladinha.components.common.CommonMapper
-import com.zxventures.geladinha.components.pointOfSale.ActorMessages.{PointOfSaleCreateRequest, PointOfSaleCreateResponse, PointOfSaleLoadRequest, PointOfSaleLoadResponse}
+import com.zxventures.geladinha.components.pointOfSale.ActorMessages._
 import com.zxventures.geladinha.infrastructure.logs.GelfLogger
 import com.zxventures.geladinha.infrastructure.routes.ApplicationRoute
 import com.zxventures.geladinha.resources.pointOfSale.{PointOfSale => PointOfSaleResource}
@@ -34,7 +35,7 @@ trait PointOfSaleRoute extends ApplicationRoute {
               case Success(response) =>
                 response match {
                   case PointOfSaleCreateResponse(_, Some(pointOfSale), Nil, None) =>
-                    val addedPointOfSale = PointOfSaleMapper.toResource(pointOfSale)
+                    val addedPointOfSale = PointOfSaleMapper.toPointOfSaleResource(pointOfSale)
                     complete((Created, addedPointOfSale))
 
                   case PointOfSaleCreateResponse(_, None, messages, None) =>
@@ -61,7 +62,7 @@ trait PointOfSaleRoute extends ApplicationRoute {
             case Success(response) =>
               response match {
                 case PointOfSaleLoadResponse(_, Some(pointOfSale), _) =>
-                  val resource = PointOfSaleMapper.toResource(pointOfSale)
+                  val resource = PointOfSaleMapper.toPointOfSaleResource(pointOfSale)
                   complete((OK, resource))
 
                 case PointOfSaleLoadResponse(_, None, None) =>
@@ -75,6 +76,34 @@ trait PointOfSaleRoute extends ApplicationRoute {
             case Failure(e) =>
               log.error(GelfLogger.buildWithRequestId(requestId).error(s"point of sale load failed"), e)
               complete(InternalServerError)
+          }
+        }
+      } ~
+      path("points-of-sale") {
+        get {
+          parameters('latitude.as[Float], 'longitude.as[Float]) { (latitude, longitude) =>
+            val geom = new GeometryFactory()
+            val address = geom.createPoint(new Coordinate(longitude, latitude))
+            address.setSRID(4326)
+
+            val actorResponse = (serviceActor ? PointOfSaleListRequest(requestId, address)).mapTo[PointOfSaleListResponse]
+
+            onComplete(actorResponse) {
+              case Success(response) =>
+                response match {
+                  case PointOfSaleListResponse(_, pointsOfSale, None) =>
+                    val resource = PointOfSaleMapper.toPointsOfSaleResource(pointsOfSale)
+                    complete((OK, resource))
+
+                  case PointOfSaleListResponse(_, Nil, Some(failure)) =>
+                    log.error(GelfLogger.buildWithRequestId(requestId).error(s"points of sale list failed"), failure)
+                    complete(InternalServerError)
+                }
+
+              case Failure(e) =>
+                log.error(GelfLogger.buildWithRequestId(requestId).error(s"point of sale list failed"), e)
+                complete(InternalServerError)
+            }
           }
         }
       }

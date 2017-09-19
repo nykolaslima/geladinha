@@ -45,8 +45,7 @@ dependencies/clean/resources:
 
 # Download latest version of `swagger-ui` in order to provided a built application with swagger interface
 #
-dependencies/swagger-ui:
-	- rm -rf src/main/resources/public/swagger
+dependencies/swagger-ui: dependencies/clean/swagger-ui
 	- mkdir -p src/main/resources/public/swagger
 	- git clone \
 	        --branch v2.2.8 \
@@ -54,6 +53,10 @@ dependencies/swagger-ui:
 	        tmp/swagger 2> /dev/null
 	- mv tmp/swagger/dist/** src/main/resources/public/swagger
 	- cp src/main/resources/api-docs/index.html src/main/resources/public/swagger/index.html
+
+dependencies/clean/swagger-ui:
+	- rm -rf src/main/resources/public/swagger
+	- rm -rf tmp/swagger
 
 # Download proto resources from specified Github repository `PROTO_REPOSITORY` and tag `PROTO_VERSION`.
 # The downloaded proto files will be placed into `PROTOS_PATH` and it also created the generated
@@ -128,7 +131,7 @@ MIGRATE_DB_PASSWORD := postgres
 MIGRATE_DB_URL := jdbc:postgresql://postgres/geladinha
 
 PROTO_REPOSITORY = nykolaslima/geladinha-resources
-PROTO_VERSION = v0.0.3
+PROTO_VERSION = v0.0.4
 PROTOS_PATH = tmp/resources
 RESOURCES_PATH = src/main/generated-proto
 

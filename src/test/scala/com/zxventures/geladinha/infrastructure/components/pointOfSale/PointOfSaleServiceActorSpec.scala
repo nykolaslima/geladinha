@@ -3,7 +3,7 @@ package com.zxventures.geladinha.infrastructure.components.pointOfSale
 import java.util.UUID
 
 import akka.testkit.TestProbe
-import com.zxventures.geladinha.components.pointOfSale.ActorMessages.{PointOfSaleCreateRequest, PointOfSaleCreateResponse, PointOfSaleLoadRequest}
+import com.zxventures.geladinha.components.pointOfSale.ActorMessages.{PointOfSaleCreateRequest, PointOfSaleCreateResponse, PointOfSaleListRequest, PointOfSaleLoadRequest}
 import com.zxventures.geladinha.components.pointOfSale.{PointOfSaleMapper, PointOfSaleServiceActor, PointOfSaleValidator}
 import com.zxventures.geladinha.infrastructure.generators.pointOfSale.PointOfSaleGenerator
 import com.zxventures.geladinha.infrastructure.test.ActorSpec
@@ -49,6 +49,20 @@ class PointOfSaleServiceActorSpec extends ActorSpec with PointOfSaleGenerator wi
         val (repositoryActor, _, _, serviceActor) = setUp()
         val id = 1l
         val loadMessage = PointOfSaleLoadRequest(UUID.randomUUID(), id)
+
+        serviceActor ! loadMessage
+
+        repositoryActor.expectMsg(loadMessage)
+      }
+    }
+  }
+
+  "PointOfSaleListAvailableRequest message" when {
+    "receives a request" must {
+      "forward message to PointOfSaleRepositoryActor" in {
+        val (repositoryActor, _, _, serviceActor) = setUp()
+        val address = pointOfSaleGen.sample.get.address
+        val loadMessage = PointOfSaleListRequest(UUID.randomUUID(), address)
 
         serviceActor ! loadMessage
 
