@@ -7,7 +7,7 @@ import akka.http.scaladsl.server.Directives._
 import com.google.protobuf.Descriptors.Descriptor
 import com.zxventures.geladinha.resources.common.{Error, Message, Messages}
 import com.zxventures.geladinha.resources.geometry.{LinearString, MultiPolygon, Point, Polygon}
-import com.zxventures.geladinha.resources.pointOfSale.PointOfSale
+import com.zxventures.geladinha.resources.pointOfSale.{PointOfSale, PointsOfSale}
 import de.heikoseeberger.akkahttpjson4s.Json4sSupport
 import org.json4s.{DefaultFormats, jackson}
 import spray.json.DefaultJsonProtocol
@@ -21,6 +21,7 @@ class SwaggerRoute extends Json4sSupport with DefaultJsonProtocol with SprayJson
 
   val descriptors: List[Descriptor] = List(
       PointOfSale.javaDescriptor,
+      PointsOfSale.javaDescriptor,
       MultiPolygon.javaDescriptor,
       Polygon.javaDescriptor,
       LinearString.javaDescriptor,

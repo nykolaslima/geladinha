@@ -2,7 +2,7 @@ package com.zxventures.geladinha.components.pointOfSale
 
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
 import akka.event.LoggingReceive
-import com.zxventures.geladinha.components.pointOfSale.ActorMessages.{PointOfSaleCreateRequest, PointOfSaleCreateResponse, PointOfSaleLoadRequest}
+import com.zxventures.geladinha.components.pointOfSale.ActorMessages.{PointOfSaleCreateRequest, PointOfSaleCreateResponse, PointOfSaleListRequest, PointOfSaleLoadRequest}
 import com.zxventures.geladinha.infrastructure.logs.ApplicationError._
 import com.zxventures.geladinha.infrastructure.logs.GelfLogger
 
@@ -28,6 +28,9 @@ class PointOfSaleServiceActor(repositoryActorRef: Option[ActorRef], validator: P
       }
 
     case request: PointOfSaleLoadRequest =>
+      repositoryActor forward request
+
+    case request: PointOfSaleListRequest =>
       repositoryActor forward request
 
     case x: Any =>

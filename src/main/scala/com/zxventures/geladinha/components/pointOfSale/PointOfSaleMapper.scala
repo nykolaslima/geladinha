@@ -2,7 +2,7 @@ package com.zxventures.geladinha.components.pointOfSale
 
 import com.vividsolutions.jts.geom._
 import com.zxventures.geladinha.resources.geometry.{LinearString, MultiPolygon => MultiPolygonResource, Point => PointResource, Polygon => PolygonResource}
-import com.zxventures.geladinha.resources.pointOfSale.{PointOfSale => PointOfSaleResource}
+import com.zxventures.geladinha.resources.pointOfSale.{PointOfSale => PointOfSaleResource, PointsOfSale => PointsOfSaleResource}
 
 trait PointOfSaleMapper {
   def toPointOfSale(pointOfSaleCreate: PointOfSaleCreate) = PointOfSale(
@@ -22,7 +22,7 @@ trait PointOfSaleMapper {
     address = resource.address.map(toPoint)
   )
 
-  def toResource(pointOfSale: PointOfSale) = PointOfSaleResource(
+  def toPointOfSaleResource(pointOfSale: PointOfSale) = PointOfSaleResource(
     id = pointOfSale.id,
     tradingName = pointOfSale.tradingName,
     ownerName = pointOfSale.ownerName,
@@ -30,6 +30,8 @@ trait PointOfSaleMapper {
     coverageArea = Some(toCoverageAreaResource(pointOfSale.coverageArea)),
     address = Some(toPointResource(pointOfSale.address))
   )
+
+  def toPointsOfSaleResource(pointsOfSale: List[PointOfSale]) = PointsOfSaleResource(pointsOfSale.map(toPointOfSaleResource))
 
   private def toCoverageAreaResource(coverageArea: MultiPolygon): MultiPolygonResource = {
     val polygonQuantity = coverageArea.getNumGeometries

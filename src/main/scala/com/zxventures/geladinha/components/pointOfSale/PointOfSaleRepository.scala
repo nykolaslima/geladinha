@@ -4,6 +4,7 @@ import com.vividsolutions.jts.geom.{MultiPolygon, Point}
 import com.zxventures.geladinha.infrastructure.persistence.postgres.DBConnection
 import com.zxventures.geladinha.infrastructure.persistence.postgres.PostgresDriver.api._
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 trait PointOfSaleRepository extends DBConnection {
@@ -18,6 +19,11 @@ trait PointOfSaleRepository extends DBConnection {
   def load(id: Long): Future[Option[PointOfSale]] = {
     val query = pointsOfSale.filter(_.id === id).result.headOption
     run(query)
+  }
+
+  def list(address: Point): Future[List[PointOfSale]] = {
+    val query = pointsOfSale.filter(_.coverageArea.contains(address)).sortBy(_.address.distance(address)).result
+    run(query).map(_.toList)
   }
 
   private[pointOfSale] class PointOfSaleModel(tag: Tag) extends Table[PointOfSale](tag, "points_of_sale") {

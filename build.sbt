@@ -4,6 +4,8 @@ scalaVersion := "2.11.8"
 
 resolvers += Resolver.bintrayRepo("hseeberger", "maven")
 
+parallelExecution in ThisBuild := false
+
 enablePlugins(JavaAppPackaging)
 
 unmanagedSourceDirectories in Compile += baseDirectory.value / "src/main/generated-proto"
