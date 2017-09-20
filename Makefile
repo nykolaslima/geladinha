@@ -96,13 +96,6 @@ test/run:
 test/coverage:
 	$(_sbt-cmd) coverage coverageReport
 
-# Send coverate reports to Coveralls
-#
-#   make test/coveralls
-#
-test/coveralls:
-	$(_sbt-cmd) coverageAggregate coveralls
-
 # Configure gcloud tool to be used by circleci
 #   make circleci/gcloud/setup
 #
