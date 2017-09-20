@@ -13,6 +13,10 @@ machine:
     PROJECT_NAME: "api"
     CLUSTER_NAME: "api-cluster"
     CLOUDSDK_COMPUTE_ZONE: "us-east1-d"
+    COVERALLS_REPO_TOKEN: ${COVERALLS_REPO_TOKEN}
+    COVERALLS_SERVICE_JOB_ID: ${CIRCLE_BUILD_NUM}
+    COVERALLS_SERVICE_NAME: CircleCI
+    TRAVIS_JOB_ID: ${CIRCLE_BUILD_NUM}
 dependencies:
   cache_directories:
     - "~/.m2"
@@ -23,5 +27,6 @@ dependencies:
 test:
   override:
     - sudo service postgresql stop
+    - while sudo lsof -Pi :5432 -sTCP:LISTEN -t; do sleep 1; done
     - make test
     - make test/coveralls
