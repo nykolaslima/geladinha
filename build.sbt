@@ -8,8 +8,6 @@ parallelExecution in ThisBuild := false
 
 enablePlugins(JavaAppPackaging)
 
-coverageEnabled := true
-
 unmanagedSourceDirectories in Compile += baseDirectory.value / "src/main/generated-proto"
 
 val akkaV = "2.4.16"

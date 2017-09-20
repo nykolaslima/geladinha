@@ -2,6 +2,27 @@
 # Tasks #
 #########
 
+# Setup and start application on development environment through a on demand generated application docker image using
+# docker-compose local dependencies (such as databases).
+#
+#   make start/development
+#
+start/development: build image dependencies/services development/run
+
+# Teardown start/development dependencies (such as databases)
+#
+#   make start/clean/development
+#
+start/clean/development: dependencies/clean/services
+
+development/run:
+	- docker run \
+        --link postgres:postgres \
+        -p 8080:8080 \
+        -e environment=development \
+        geladinha:$(version) \
+        -Dakka.loglevel=INFO
+
 # Build application (fat jar)
 build: dependencies/resources dependencies/swagger-ui
 	$(_sbt-cmd) universal:packageZipTarball
@@ -11,7 +32,7 @@ image: build
 	- docker build \
 	--build-arg version=$(version) \
 	-t ${PROJECT_NAME}:$(version) .
-	- docker tag ${PROJECT_NAME}:$(version) us.gcr.io/${GPROJECT_NAME}/${PROJECT_NAME}:$(version)
+	- docker tag ${PROJECT_NAME}:$(version) ${PROJECT_NAME}:$(version)
 
 # Start services and third-party dependencies such as postgres, redis, etc
 dependencies/services: dependencies/services/run db/migrate
@@ -30,7 +51,8 @@ dependencies/clean/services:
 #       MIGRATE_DB_URL="jdbc:postgresql://db.expendables.io:5432/jobs"
 #
 db/migrate:
-	$(_flyway_cmd) migrate
+	- sleep 2
+	- $(_flyway_cmd) migrate
 
 # Compile download proto files from `PROTOS_PATH` and output generated classes into `RESOURCES_PATH`
 #
@@ -73,7 +95,7 @@ fetch/resources:
 #
 #   make test
 #
-test: dependencies/resources dependencies/services test/run test/coverage dependencies/clean/services
+test: dependencies/resources dependencies/services test/run test/coverageReport dependencies/clean/services
 
 # Compile project with test folder included
 #
@@ -87,18 +109,20 @@ test/compile: dependencies/resources
 #   make test/run
 #
 test/run:
-	$(_sbt-cmd-with-dependencies) test
+	$(_sbt-cmd-with-dependencies) coverage test
 
 # Run coverage analysis and reports
 #
 #   make test/coverage
 #
-test/coverage:
-	$(_sbt-cmd) coverage coverageReport
+test/coverageReport:
+	$(_sbt-cmd) coverageReport
 
 ###############
 # Definitions #
 ###############
+
+PROJECT_NAME = geladinha
 
 MIGRATE_DB_USER := postgres
 MIGRATE_DB_PASSWORD := postgres

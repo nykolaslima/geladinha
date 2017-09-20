@@ -8,7 +8,7 @@ The endpoints support JSON and binary Protobuf protocols with Swagger as documen
 
 - Tools
   - [Circle CI](https://circleci.com/gh/nykolaslima/geladinha),
-  - Swagger: [localhost](http://localhost:9090/api-docs/)
+  - Swagger: [localhost](http://localhost:8080/api-docs/)
 
 ## Requirements
 
@@ -22,6 +22,8 @@ day-to-day task when developing and deploying an application.
 
 ### Tasks
 
+- `make start/development`: Start application on local development environment.
+- `make start/clean/development`: Clean started development application dependencies.
 - `make build`: Build a self-contained jar with all dependencies included.
 - `make image`: Build a Docker image with the latest tag (implicates `build`).
 - `make image/publish`: Publishes the built image (implicates `build` and `image`).
@@ -34,12 +36,15 @@ day-to-day task when developing and deploying an application.
 
 ### Running the application
 
-The docker image defines an entrypoint ready to run and optionally pass custom args:
+We can run application on development environment through on demand generated application docker image 
+using local docker-compose dependencies.
 
 ```sh
-docker run \
-  -p 9090:9090 \
-  -e environment=test \
-  zxventures/geladinha:latest \
-  -Dakka.loglevel=WARN
+make start/development
+```
+
+In order to clean `start/development` dependencies just run:
+
+```sh
+make start/clean/development
 ```
