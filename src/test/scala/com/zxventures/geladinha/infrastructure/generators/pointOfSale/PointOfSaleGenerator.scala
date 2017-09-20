@@ -10,7 +10,7 @@ import org.scalacheck.Gen._
 trait PointOfSaleGenerator extends GeneratorUtil {
 
   val geom = new GeometryFactory()
-  private val polygonPoints = List(
+  val polygonPoints = List(
     PointResource(
       latitude = -23.53560255279179f,
       longitude = -46.7936897277832f
@@ -24,8 +24,8 @@ trait PointOfSaleGenerator extends GeneratorUtil {
       longitude = -46.77781105041503f
     ),
     PointResource(
-      latitude = -46.77856206893921f,
-      longitude = -23.537530458746964f
+      latitude = -23.537530458746964f,
+      longitude = -46.77856206893921f
     ),
     PointResource(
       latitude = -23.52997605345957f,
