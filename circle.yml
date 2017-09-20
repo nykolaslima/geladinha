@@ -6,13 +6,9 @@ machine:
   services:
     - docker
   environment:
-    AWS_DEFAULT_REGION: "us-east-1"
     SBT_VERSION: "0.13.13"
     SBT_OPTS: "-Xms512M -Xmx1536M -Xss1M -XX:+CMSClassUnloadingEnabled"
-    GPROJECT_NAME: "geladinha"
-    PROJECT_NAME: "api"
-    CLUSTER_NAME: "api-cluster"
-    CLOUDSDK_COMPUTE_ZONE: "us-east1-d"
+    PROJECT_NAME: "geladinha"
 dependencies:
   cache_directories:
     - "~/.m2"
