@@ -45,6 +45,52 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "Public"
+        ],
+        "summary": "List points of sale by some filters",
+        "description": "Given the filters, list points of sale",
+        "operationId": "ListPointOfSale",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "latitude",
+            "in": "query",
+            "description": "Latitude of the address to filter points of sale by coverage area",
+            "required": true,
+            "type": "number",
+            "format": "float"
+          },
+          {
+            "name": "longitude",
+            "in": "query",
+            "description": "Longitude of the address to filter points of sale by coverage area",
+            "required": true,
+            "type": "number",
+            "format": "float"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found points of sale",
+            "schema": {
+              "$ref": "#/definitions/PointsOfSale"
+            }
+          },
+          "500": {
+            "description": "Unexpected error happened",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
       }
     },
     "/points-of-sale/{id}": {
@@ -82,54 +128,6 @@
             "description": "No point of sale found",
             "schema": {
               "$ref": "#/definitions/Messages"
-            }
-          },
-          "500": {
-            "description": "Unexpected error happened",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
-          }
-        }
-      }
-    },
-    "/points-of-sale": {
-      "get": {
-        "tags": [
-          "Public"
-        ],
-        "summary": "List points of sale by some filters",
-        "description": "Given the filters, list points of sale",
-        "operationId": "ListPointOfSale",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "latitude",
-            "in": "query",
-            "description": "Latitude of the address to filter points of sale by coverage area",
-            "required": true,
-            "type": "number",
-            "format": "float"
-          },
-          {
-            "name": "longitude",
-            "in": "query",
-            "description": "Longitude of the address to filter points of sale by coverage area",
-            "required": true,
-            "type": "number",
-            "format": "float"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Found points of sale",
-            "schema": {
-              "$ref": "#/definitions/PointsOfSale"
             }
           },
           "500": {

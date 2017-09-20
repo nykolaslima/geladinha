@@ -110,7 +110,7 @@ object SwaggerDocs {
 
     def fields(descriptor: Descriptor) = {
       descriptor.getFields.toArray.asInstanceOf[Array[FieldDescriptor]]
-        .foldLeft(Map[String, Any]()) { (a, b) => Map(b.getName -> fieldDetails(b)) ++ a }
+        .foldLeft(Map[String, Any]()) { (a, b) => Map(underscoreToCamel(b.getName) -> fieldDetails(b)) ++ a }
     }
 
     val resourcesToGenerate = _resources.filter { resource =>
@@ -184,4 +184,8 @@ object SwaggerDocs {
       "host" -> config.getString("swagger.host")
     )
   }
+
+  private def underscoreToCamel(name: String) = "_([a-z\\d])".r.replaceAllIn(name, {m =>
+    m.group(1).toUpperCase()
+  })
 }
