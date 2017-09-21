@@ -17,7 +17,7 @@ trait PointOfSaleMapper {
   def toPointOfSaleCreate(resource: PointOfSaleResource) = PointOfSaleCreate(
     tradingName = nonEmpty(resource.tradingName),
     ownerName = nonEmpty(resource.ownerName),
-    document = nonEmpty(resource.document),
+    document = nonEmpty(resource.document.replaceAll("[\\./-]", "")),
     coverageArea = resource.coverageArea.map(toCoverageArea),
     address = resource.address.map(toPoint)
   )

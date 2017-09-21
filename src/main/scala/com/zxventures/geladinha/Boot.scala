@@ -22,6 +22,9 @@ object Boot extends App with DBConnection {
   //database connection warm up
   Await.result(PointOfSaleRepository.load(1), 5.seconds)
 
+  //load initial points of sale
+  LoadInitialPointsOfSale.load()
+
   val mainRoute = new MainRoute()
 
   Http().bindAndHandle(mainRoute.routes, config.getString("http.interface"), config.getInt("http.port")).onComplete {
