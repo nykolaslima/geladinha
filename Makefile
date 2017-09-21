@@ -51,7 +51,7 @@ dependencies/clean/services:
 #       MIGRATE_DB_URL="jdbc:postgresql://db.expendables.io:5432/jobs"
 #
 db/migrate:
-	- sleep 2
+	- sleep 5
 	- $(_flyway_cmd) migrate
 
 # Compile download proto files from `PROTOS_PATH` and output generated classes into `RESOURCES_PATH`
