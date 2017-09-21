@@ -52,7 +52,8 @@ class PointOfSaleRepositoryActor(repository: PointOfSaleRepository) extends Acto
           replyTo ! PointOfSaleListResponse(requestId, failure = Some(e))
       }
 
-    case x: Any => log.warning(GelfLogger.warn(s"Unknown message: $x", Map("internal_operation" -> UNKNOWN_MESSAGE)))
+    case x: Any =>
+      log.warning(GelfLogger.warn(s"Unknown message: $x", Map("internal_operation" -> UNKNOWN_MESSAGE)))
   }
 }
 

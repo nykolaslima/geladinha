@@ -8,6 +8,10 @@ import com.zxventures.geladinha.resources.common.{Message => MessageResource, Me
 trait ValidationRulesUtil {
   implicit val userLang = Lang("pt")
 
+  def ensureMessageFor(target: String, key: String) = Message(
+    MessageCategory.VALIDATION, target, Messages(key, Messages(target)), key
+  )
+
   def requiredMessageFor(target: String) = Message(
     MessageCategory.VALIDATION, target, Messages("validation.required", Messages(target)), "validation.required", List(target)
   )

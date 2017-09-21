@@ -19,4 +19,5 @@ dependencies:
 test:
   override:
     - sudo service postgresql stop
+    - sleep 5
     - make test

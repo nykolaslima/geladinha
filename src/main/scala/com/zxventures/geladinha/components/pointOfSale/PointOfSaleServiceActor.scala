@@ -5,6 +5,9 @@ import akka.event.LoggingReceive
 import com.zxventures.geladinha.components.pointOfSale.ActorMessages.{PointOfSaleCreateRequest, PointOfSaleCreateResponse, PointOfSaleListRequest, PointOfSaleLoadRequest}
 import com.zxventures.geladinha.infrastructure.logs.ApplicationError._
 import com.zxventures.geladinha.infrastructure.logs.GelfLogger
+import scala.concurrent.ExecutionContext.Implicits.global
+
+import scala.util.{Failure, Success}
 
 class PointOfSaleServiceActor(repositoryActorRef: Option[ActorRef], validator: PointOfSaleValidator, mapper: PointOfSaleMapper) extends Actor with ActorLogging {
   override def preRestart(reason: Throwable, message: Option[Any]): Unit = {
@@ -18,13 +21,16 @@ class PointOfSaleServiceActor(repositoryActorRef: Option[ActorRef], validator: P
     case request @ PointOfSaleCreateRequest(requestId, create, _) =>
       val replyTo = sender()
 
-      validator.validate(create) match {
-        case Nil =>
+      validator.validate(create).onComplete {
+        case Success(Nil) =>
           val pointOfSale = mapper.toPointOfSale(create)
-          repositoryActor forward request.copy(pointOfSale = Some(pointOfSale))
+          repositoryActor.tell(request.copy(pointOfSale = Some(pointOfSale)), replyTo)
 
-        case messages =>
+        case Success(messages) =>
           replyTo ! PointOfSaleCreateResponse(requestId, messages = messages)
+
+        case Failure(e) =>
+          replyTo ! PointOfSaleCreateResponse(requestId, failure = Some(e))
       }
 
     case request: PointOfSaleLoadRequest =>

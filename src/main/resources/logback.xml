@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>application.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOGS_FOLDER}/application.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date - [%level] - from %logger in %thread = %replace(%message){'\n', ' '} %xException%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE"/>
+    </appender>
+
+
+    <logger name="akka" level="ERROR"/>
+    <logger name="akka.http" level="ERROR"/>
+    <logger name="akka.stream" level="ERROR"/>
+
+    <logger name="org.flywaydb" level="ERROR"/>
+    <logger name="com.zaxxer.hikari" level="INFO"/>
+
+    <logger name="com.zxventures" level="INFO"/>
+
+    <root level="INFO">
+        <appender-ref ref="ASYNC"/>
+    </root>
+</configuration>
