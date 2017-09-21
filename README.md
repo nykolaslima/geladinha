@@ -4,7 +4,7 @@
 
 # TL/DR
 Start application on development environment
-(You must have Docker configured in your machine):
+(You must have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) configured in your machine):
 ```sh
 make start/development
 ```
@@ -95,6 +95,7 @@ tree src/main/scala/com/zxventures/geladinha/components/pointOfSale
 ## Requirements
 
 - [Docker](https://docs.docker.com/engine/installation/)
+- [Docker Compose](https://docs.docker.com/compose/)
 
 ## Makefile
 
