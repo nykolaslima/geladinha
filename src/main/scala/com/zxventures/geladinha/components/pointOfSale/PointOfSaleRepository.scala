@@ -21,6 +21,11 @@ trait PointOfSaleRepository extends DBConnection {
     run(query)
   }
 
+  def loadByDocument(document: String): Future[Option[PointOfSale]] = {
+    val query = pointsOfSale.filter(_.document === document).result.headOption
+    run(query)
+  }
+
   def list(address: Point): Future[List[PointOfSale]] = {
     val query = pointsOfSale.filter(_.coverageArea.contains(address)).sortBy(_.address.distance(address)).result
     run(query).map(_.toList)

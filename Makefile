@@ -133,7 +133,8 @@ PROTO_VERSION = v0.0.4
 PROTOS_PATH = tmp/resources
 RESOURCES_PATH = src/main/generated-proto
 
-_flyway_cmd = docker run --rm --net host -v ${PWD}/src/main/resources/db/migrations:/flyway/sql \
+_flyway_cmd = docker run --rm -v ${PWD}/src/main/resources/db/migrations:/flyway/sql \
+      --link postgres:postgres \
       shouldbee/flyway \
       -user="$(MIGRATE_DB_USER)" \
       -password="$(MIGRATE_DB_PASSWORD)" \

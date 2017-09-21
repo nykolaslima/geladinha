@@ -5,3 +5,5 @@ pointOfSale.ownerName Owner name
 pointOfSale.document Document
 pointOfSale.coverageArea Coverage area
 pointOfSale.address Address
+
+validation.pointOfSale.documentAlreadyInUse Document is already being used by a registered Point of Sale

@@ -16,7 +16,7 @@ import scala.concurrent.duration._
 
 class PointOfSaleRouteSpec extends RouteSpec with PointOfSaleRoute with PointOfSaleGenerator with ValidationRulesUtil {
   def actorSystem: ActorSystem = system
-  override val timeout = Timeout(5.second)
+  override val timeout = Timeout(10.second)
 
   "POST /points-of-sale" when {
     "receives a valid point of sale" must {
